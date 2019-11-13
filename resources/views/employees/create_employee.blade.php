@@ -50,8 +50,7 @@
                            <div class="col-md-6">
                                  <select class="form-control" id="company_id" name="company_id" value="100">
                                     @foreach ($companies as $company)   
-                                          <option value="{{ $company->id }}" {{ ($company_id == $company->id ? "selected":"") }}>{{ $company->name }}</option>                                      
-                                          <option value="{{ $company->id }}">{!! $company->name !!}</option>
+                                          <option value="{{ $company->id }}" {{ ($company_id == $company->id ? "selected":"") }}>{{ $company->name }}</option>
                                     @endforeach
                               </select>   
                            </div>
