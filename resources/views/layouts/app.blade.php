@@ -33,6 +33,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
+                        @auth
 
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
@@ -53,6 +54,7 @@
                                 <a class="dropdown-item" href="/employees">List All Employees</a>
                             </div>
                         </li>
+                        @endauth
 
                     </ul>
 
