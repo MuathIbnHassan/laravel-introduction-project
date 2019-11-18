@@ -56,3 +56,5 @@ Route::get('employees/{employee_id}/edit', 'EmployeesController@edit');
 Route::match(['put', 'patch'], 'employees/{employee_id}', 'EmployeesController@update')->name('employee.update');
 
 Route::delete('employees/{employee_id}',  'EmployeesController@destroy');
+
+Route::get('tags/{tag_name}', 'TAgController@tagIndex');

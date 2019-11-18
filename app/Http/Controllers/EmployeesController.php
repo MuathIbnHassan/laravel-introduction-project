@@ -111,7 +111,8 @@ class EmployeesController extends Controller
         $employee = Employee::findOrFail($id);
         return view('employees/show_employee')->with([
             'employee'  =>  $employee,
-            'company'   => $employee->company->name
+            'company'   =>  $employee->company->name,
+            'tags'      =>  $employee->tags
         ]);
     }
 

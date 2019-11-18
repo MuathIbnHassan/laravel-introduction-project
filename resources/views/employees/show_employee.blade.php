@@ -51,10 +51,106 @@
                         
                   </div>
                </div>
+               <div class="card bg-light text-dark">
+                  <div onload="getTags()" class="card-header" id="tags">
+                     <span>Loading Tags ..</span>
+                  </div>
+                  <div class="card">
+                     
+                     <button onclick="disableAddButton();" type="button" class="btn btn-warning" data-toggle="collapse" data-target="#addTagCollapse" id="addTagCollapseButton">Add Tag
+                        <div id="addTagCollapse" class="collapse">
+                           Tag Name:
+                           <input type="text" class="form-control" id="add_tag_name">
+                           <a onclick="setTag()" href="#" class="btn btn-primary" id="addTag">Add Tag</a>
+
+                        </div>
+                     </button>
+
+                     <button onclick="disableDelButton()" type="button" class="btn btn-danger" data-toggle="collapse" data-target="#delTagCollapse" id="delTagCollapseButton">Delete Tag
+                        <div id="delTagCollapse" class="collapse">
+                           Tag Name:
+                           <input type="text" class="form-control" id="del_tag_name">
+                           <a onclick="delTag()" href="#" class="btn btn-primary" id="delTag">Delete Tag</a>
+
+                        </div>
+                     </button>
+                     
+                  </div>
+               </div>
             </div>
          </div>
     </div>
    </div>
+    <script type="application/javascript">
+
+      function disableAddButton() {
+         $('#addTagCollapseButton').attr("disabled", true);
+         $("#addTagCollapse").addClass("show");    //aria-expanded="true"
+      }
+      function disableDelButton() {
+         $('#delTagCollapseButton').attr("disabled", true);
+         $("#delTagCollapse").addClass("show");    //aria-expanded="true"
+      }
+
+      function setTag() {
+         var tag_name = $("#add_tag_name").val()
+         var employee_id ={{ $employee->id }};   
+         console.log(tag_name,employee_id);
+         jQuery.ajax({
+            url: "/api/tags/employee/"+tag_name+"/"+employee_id,
+            type: "post",
+         })
+         .done(function(data, textStatus, jqXHR) {
+            console.log("HTTP Request Succeeded: " + jqXHR.status);
+            console.log(data);
+             $('#addTagCollapseButton').attr("disabled", false);
+            $("#addTagCollapse").removeClass("show");
+            getTags()
+         })
+         .fail(function(jqXHR, textStatus, errorThrown) {
+            console.log("HTTP Request Failed");
+            
+         })
+         .always(function() {
+            /* ... */
+         });         
+      }
+
+      function delTag() {
+         var tag_name = $("#del_tag_name").val()
+         var employee_id={{ $employee->id }};   
+         console.log(tag_name,employee_id);
+         jQuery.ajax({
+            url: "/api/tags/employee/"+tag_name+"/"+employee_id,
+            type: "DELETE",
+         })
+         .done(function(data, textStatus, jqXHR) {
+            console.log("HTTP Request Succeeded: " + jqXHR.status);
+            console.log(data);
+             $('#delTagCollapseButton').attr("disabled", false);
+            $("#delTagCollapse").removeClass("show");
+            getTags()
+         })
+         .fail(function(jqXHR, textStatus, errorThrown) {
+            console.log("HTTP Request Failed");
+            
+         })
+         .always(function() {
+            /* ... */
+         });         
+      }
+
+      $(document).ready(function(){
+            getTags();
+      });
+
+      function getTags() {
+         var employee_id = {{ $employee->id}};
+         console.log(employee_id);
+          $("#tags").load("http://firsttask2.test/api/tags/employee/"+employee_id);
+      }
+
+   </script>
    @endsection
 
 </html>

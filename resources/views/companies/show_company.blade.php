@@ -1,13 +1,4 @@
 
-<!DOCTYPE html>
- 
-<html lang="en">
-<head>
-
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
- 
-</head>
-
    @extends('layouts.app')
    @section('content')
    
@@ -43,6 +34,32 @@
                   </div>
                   <img class="card-img-top" src="/storage/{{ $company->logo }}"   alt="Card image" style="width:40%">
                </div>
+               <div class="card bg-light text-dark">
+                  <div onload="getTags()" class="card-header" id="tags">
+                     <span>Loading Tags ..</span>
+                  </div>
+                  <div class="card">
+                     
+                     <button onclick="disableAddButton();" type="button" class="btn btn-warning" data-toggle="collapse" data-target="#addTagCollapse" id="addTagCollapseButton">Add Tag
+                        <div id="addTagCollapse" class="collapse">
+                           Tag Name:
+                           <input type="text" class="form-control" id="add_tag_name">
+                           <a onclick="setTag()" href="#" class="btn btn-primary" id="addTag">Add Tag</a>
+
+                        </div>
+                     </button>
+
+                     <button onclick="disableDelButton()" type="button" class="btn btn-danger" data-toggle="collapse" data-target="#delTagCollapse" id="delTagCollapseButton">Delete Tag
+                        <div id="delTagCollapse" class="collapse">
+                           Tag Name:
+                           <input type="text" class="form-control" id="del_tag_name">
+                           <a onclick="delTag()" href="#" class="btn btn-primary" id="delTag">Delete Tag</a>
+
+                        </div>
+                     </button>
+                     
+                  </div>
+               </div>
                <div class="card-footer card-columns">
                   
                      
@@ -65,7 +82,75 @@
             </div>
          </div>
     </div>
-   </div>
-   @endsection
+   </div>   
+   <script type="application/javascript">
 
-</html>
+      function disableAddButton() {
+         $('#addTagCollapseButton').attr("disabled", true);
+         $("#addTagCollapse").addClass("show");    //aria-expanded="true"
+      }
+      function disableDelButton() {
+         $('#delTagCollapseButton').attr("disabled", true);
+         $("#delTagCollapse").addClass("show");    //aria-expanded="true"
+      }
+
+      function setTag() {
+         var tag_name = $("#add_tag_name").val()
+         var company_id={{ $company->id }};   
+         console.log(tag_name,company_id);
+         jQuery.ajax({
+            url: "/api/tags/company/"+tag_name+"/"+company_id,
+            type: "post",
+         })
+         .done(function(data, textStatus, jqXHR) {
+            console.log("HTTP Request Succeeded: " + jqXHR.status);
+            console.log(data);
+             $('#addTagCollapseButton').attr("disabled", false);
+            $("#addTagCollapse").removeClass("show");
+            getTags()
+         })
+         .fail(function(jqXHR, textStatus, errorThrown) {
+            console.log("HTTP Request Failed");
+            
+         })
+         .always(function() {
+            /* ... */
+         });         
+      }
+
+      function delTag() {
+         var tag_name = $("#del_tag_name").val()
+         var company_id={{ $company->id }};   
+         console.log(tag_name,company_id);
+         jQuery.ajax({
+            url: "/api/tags/company/"+tag_name+"/"+company_id,
+            type: "DELETE",
+         })
+         .done(function(data, textStatus, jqXHR) {
+            console.log("HTTP Request Succeeded: " + jqXHR.status);
+            console.log(data);
+             $('#delTagCollapseButton').attr("disabled", false);
+            $("#delTagCollapse").removeClass("show");
+            getTags()
+         })
+         .fail(function(jqXHR, textStatus, errorThrown) {
+            console.log("HTTP Request Failed");
+            
+         })
+         .always(function() {
+            /* ... */
+         });         
+      }
+
+      $(document).ready(function(){
+            getTags();
+      });
+
+      function getTags() {
+         var company_id = {{ $company->id}};
+         console.log(company_id);
+          $("#tags").load("http://firsttask2.test/api/tags/company/"+company_id);
+      }
+
+   </script>
+   @endsection

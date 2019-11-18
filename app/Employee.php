@@ -14,4 +14,9 @@ class Employee extends Model
     {
         return $this->belongsTo('App\Company');
     }
+
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
 }

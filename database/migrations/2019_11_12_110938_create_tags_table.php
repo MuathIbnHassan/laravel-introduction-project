@@ -15,6 +15,8 @@ class CreateTagsTable extends Migration
     {
         Schema::create('tags', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('tag_name');
+            $table->string('tag_color')->nullable(); //primary, secondary, success, danger, warning, info, light, dark.
             $table->timestamps();
         });
     }
